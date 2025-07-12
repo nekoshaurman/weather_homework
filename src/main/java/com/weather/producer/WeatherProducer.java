@@ -1,5 +1,7 @@
 package com.weather.producer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -9,9 +11,11 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class WeatherProducer {
-
+    private static final Logger logger = LoggerFactory.getLogger(WeatherProducer.class); // логгер
     private static final String BOOTSTRAP_SERVERS = "localhost:9092"; // хост кафки
     private static final String TOPIC = "weather-topic"; // топик кафки
 
@@ -40,7 +44,9 @@ public class WeatherProducer {
             // сообщение в топик кафки
             producer.send(new ProducerRecord<>(TOPIC, "weather", message));
 
-            System.out.println("Sent weather data: " + message);
+            String currentTime = getCurrentTime();
+
+            logger.info("{} - Sent weather data: {}", currentTime, message);
 
             // каждые 5 сек
             TimeUnit.SECONDS.sleep(5);
@@ -66,5 +72,10 @@ public class WeatherProducer {
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
         return new KafkaProducer<>(properties);
+    }
+
+    private static String getCurrentTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SSS");
+        return LocalDateTime.now().format(formatter);
     }
 }
