@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 
 public class WeatherConsumer {
     private static final Logger logger = LoggerFactory.getLogger(WeatherConsumer.class); // логгер
-    private static final String BOOTSTRAP_SERVERS = "localhost:9092"; // хост кафки
+    private static final String BOOTSTRAP_SERVERS = "kafka:9092"; // хост кафки
     private static final String TOPIC = "weather-topic"; // топик кафки
     private static final String GROUP_ID = "weather-consumer-group";
 
@@ -29,6 +29,7 @@ public class WeatherConsumer {
             for (ConsumerRecord<String, String> record : records) {
                 String currentTime = getCurrentTime();
 
+                //System.out.println(String.format("{\"%s\"} - Received weather data: {\"%s\"}", currentTime, record.value()));
                 logger.info("{} - Received weather data: {}", currentTime, record.value());
             }
         }

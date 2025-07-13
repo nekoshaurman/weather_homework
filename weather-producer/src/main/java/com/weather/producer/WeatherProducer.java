@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 
 public class WeatherProducer {
     private static final Logger logger = LoggerFactory.getLogger(WeatherProducer.class); // логгер
-    private static final String BOOTSTRAP_SERVERS = "localhost:9092"; // хост кафки
+    private static final String BOOTSTRAP_SERVERS = "kafka:9092"; // хост кафки
     private static final String TOPIC = "weather-topic"; // топик кафки
 
     public static void main(String[] args) throws InterruptedException {
@@ -46,6 +46,7 @@ public class WeatherProducer {
 
             String currentTime = getCurrentTime();
 
+            //System.out.println(String.format("{\"%s\"} - Sent weather data: {\"%s\"}", currentTime, message));
             logger.info("{} - Sent weather data: {}", currentTime, message);
 
             // каждые 5 сек
